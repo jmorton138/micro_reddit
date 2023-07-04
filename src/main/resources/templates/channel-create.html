@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org">
+  <head>
+    <meta charset="UTF-8">
+    <title>Home</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+
+  </head>
+  <body>
+    <header th:insert="~{navbar}"></header>
+    <h1>Create New Channel</h1>
+    <form th:action="@{/channel-create}" th:object="${channel}" method="post">
+      <input type="text" th:field="*{name}">
+      <input type="submit" value="Create Channel">Create Channel</input>
+    </form>
+  </body>
+</html>
