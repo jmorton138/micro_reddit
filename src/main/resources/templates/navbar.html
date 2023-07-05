@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <title>Navbar</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
-
 </head>
 <body>
 <div th:fragment="navbar">
@@ -25,7 +24,7 @@
                     <a class="nav-link" >Projects</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link">Add Project</a>
+                    <a class="nav-link" th:href="@{/channel-create}">Add Channel</a>
                 </li>
             </ul>
             <div sec:authorize="isAuthenticated()">
