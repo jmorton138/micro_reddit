@@ -27,9 +27,10 @@ public class ChannelController {
     @GetMapping("/channels/{channelId}")
     public String showChannel(@PathVariable("channelId") int channelId, Model model) {
         Channel channel = channelService.getChannelById(channelId);
+        channel.getPosts();
         model.addAttribute("channel", channel);
         model.addAttribute("newPost", new Post());
-        model.addAttribute("posts", postService.getAllPostsByChannel(channel));
+        model.addAttribute("posts", channel.getPosts());
         return "channel";
     }
 

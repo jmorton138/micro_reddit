@@ -63,4 +63,12 @@ public class Comment {
     public void setSubComments(List<Comment> subComments) {
         this.subComments = subComments;
     }
+
+    public Post getPost() {
+        return post;
+    }
+
+    public void setPost(Post post) {
+        this.post = post;
+    }
 }

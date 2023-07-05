@@ -27,9 +27,8 @@
             </div>
             <div class="col-sm-9">
               <div class="row">
-                <div th:text="${post.text}" class="col-8 col-sm-6">
-
-                </div>
+                <a th:text="${post.text}" class="col-8 col-sm-6" th:href="@{/channels/{channelId}/posts/{postId}(channelId=${channel.id}, postId=${post.id})}">
+                </a>
               </div>
             </div>
           </div>

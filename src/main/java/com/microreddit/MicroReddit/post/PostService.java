@@ -33,4 +33,14 @@ public class PostService {
     }
 
 
+    public Post getPostById(int postId) {
+        Optional<Post> postOptional =  postRepo.findById(postId);
+        Post post = null;
+        if (postOptional.isPresent()) {
+            post = postOptional.get();
+        } else {
+            throw new RuntimeException("Post not found for id ::" + postId);
+        }
+        return post;
+    }
 }
