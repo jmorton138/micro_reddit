@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Home</title>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+
+</head>
+<body>
+<header th:insert="~{navbar}"></header>
+<h1>Channels</h1>
+<form th:action="@{/post-create}" method="post" th:object="${newPost}">
+  <input type="text" th:field="*{text}">
+  <input type="submit" value="Submit">
+</form>
+<div class="container">
+  <div th:each="post : ${posts}">
+    <div th:text="${post.text}"></div>
+  </div>
+</div>
+</body>
+</html>
