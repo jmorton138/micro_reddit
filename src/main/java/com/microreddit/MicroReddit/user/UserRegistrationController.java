@@ -20,6 +20,6 @@ public class UserRegistrationController {
     @PostMapping("/user-registration")
     public String registerNewUser(@ModelAttribute("user") User user, Model model) {
         userService.addUser(user);
-        return "login";
+        return "index";
     }
 }
