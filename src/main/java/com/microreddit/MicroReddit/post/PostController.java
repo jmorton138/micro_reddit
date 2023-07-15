@@ -23,8 +23,8 @@ public class PostController {
         Post post = postService.getPostById(postId);
         model.addAttribute("post", post);
         model.addAttribute("channel", post.getChannel());
-        model.addAttribute("newComment", new Comment());
-        model.addAttribute("comments", post.getComments());
+        model.addAttribute("newSubPost", new Post());
+        model.addAttribute("subPosts", post.getSubPosts());
         model.addAttribute("hasUpVoted", postService.userHasUpVoted(postId));
         model.addAttribute("hasDownVoted", postService.userHasDownVoted(postId));
         return "post";
@@ -54,7 +54,12 @@ public class PostController {
             ResponseEntity<Boolean> hasVoted = new ResponseEntity<Boolean>(postService.userHasDownVoted(postId), HttpStatus.OK);
             return hasVoted;
         }
+    }
 
+    @PostMapping("/channels/{channelId}/posts/{rootPostId}/{parentPostId}/subpost-create")
+    public String submitNewPost(@PathVariable("rootPostId") int rootPostId, @PathVariable("parentPostId") int parentPostId, @PathVariable("channelId") int channelId, @ModelAttribute("newSubPost") Post subPost) {
+        postService.addNewSubPost(parentPostId, subPost);
+        return "redirect:/channels/{channelId}/posts/{rootPostId}";
     }
 
 }

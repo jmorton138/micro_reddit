@@ -2,6 +2,7 @@ package com.microreddit.MicroReddit.post;
 
 import com.microreddit.MicroReddit.channel.Channel;
 import com.microreddit.MicroReddit.channel.ChannelRepo;
+import com.microreddit.MicroReddit.comment.Comment;
 import com.microreddit.MicroReddit.user.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -90,5 +91,14 @@ public class PostService {
             }
         }
         postRepo.save(post);
+    }
+
+    public void addNewSubPost(int parentPostId, Post subPost) {
+        Post parentPost = postRepo.getById(parentPostId);
+        List<Post> subPosts = parentPost.getSubPosts();
+        postRepo.save(subPost);
+        subPosts.add(subPost);
+        parentPost.setSubPosts(subPosts);
+        postRepo.save(parentPost);
     }
 }
