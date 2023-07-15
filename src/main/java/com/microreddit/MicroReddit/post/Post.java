@@ -29,6 +29,8 @@ public class Post {
     private List<Integer> upVoterIds = new ArrayList<Integer>();
     private int downVotes;
 
+    private List<Integer> downVoterIds = new ArrayList<Integer>();
+
     @OneToMany(mappedBy = "post")
     private List<Comment> comments;
 
@@ -81,12 +83,19 @@ public class Post {
     }
 
 
-
     public List<Integer> getUpVoterIds() {
         return upVoterIds;
     }
 
     public void setUpVoterIds(List<Integer> upVoterIds) {
         this.upVoterIds = upVoterIds;
+    }
+
+    public List<Integer> getDownVoterIds() {
+        return downVoterIds;
+    }
+
+    public void setDownVoterIds(List<Integer> downVoterIds) {
+        this.downVoterIds = downVoterIds;
     }
 }

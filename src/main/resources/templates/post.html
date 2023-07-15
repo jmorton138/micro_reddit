@@ -20,9 +20,12 @@
                 </div>
                 <button type="submit" class="btn btn-primary">Submit</button>
             </form>
-            <div id="post-upvote-count" th:text="${post.upVotes}"></div>
-            <button data-posttype="post" data-votetype="upvote" class="upvote-btn" id="post-upvote-btn">Upvote</button>
-<!--            <input type="hidden" id="upvoted-post" th:value="">-->
+
+            <div>upvotes: <div id="post-upvote-count" th:text="${post.upVotes}"></div></div>
+            <div>downvotes:  <div id="post-downvote-count" th:text="${post.downVotes}"></div></div>
+
+            <button data-posttype="post" data-votetype="upvote" th:class="${hasUpVoted} ? 'upvote-btn voted' : 'upvote-btn not-voted'" id="post-upvote-btn">Upvote</button>
+            <button data-posttype="post" data-votetype="downvote" th:class="${hasDownVoted}? 'downvote-btn voted' : 'downvote-btn not-voted'" id="post-downvote-btn">Downvote</button>
         </div>
         <div class="container">
             <div th:each="comment : ${comments}">

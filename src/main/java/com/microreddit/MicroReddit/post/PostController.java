@@ -4,6 +4,8 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.TextNode;
 import com.microreddit.MicroReddit.comment.Comment;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -23,6 +25,8 @@ public class PostController {
         model.addAttribute("channel", post.getChannel());
         model.addAttribute("newComment", new Comment());
         model.addAttribute("comments", post.getComments());
+        model.addAttribute("hasUpVoted", postService.userHasUpVoted(postId));
+        model.addAttribute("hasDownVoted", postService.userHasDownVoted(postId));
         return "post";
     }
 
@@ -32,13 +36,25 @@ public class PostController {
         return "redirect:/channels/{channelId}";
     }
 
-    @PutMapping("/{postId}/vote")
+    @PutMapping("/posts/{postId}/vote")
     public String updatePostVotes(@PathVariable("postId") int postId, @RequestBody Map<String, String> requestData) {
-        ;
        // @RequestBody JsonNode voteType
         // System.out.println(requestData.get("voteType"));
-
         postService.updatePost(postId, String.valueOf(requestData.get("voteType")));
         return "index";
     }
+
+    @GetMapping("/posts/{postId}/votes/vote-type/{nonTargetedVoteType}")
+    public ResponseEntity<Boolean> userVotedNonTargeted(@PathVariable("postId") int postId, @PathVariable("nonTargetedVoteType") String nonTargetedVoteType) {
+        System.out.println(nonTargetedVoteType);
+        if (nonTargetedVoteType.equals("upvote")) {
+            ResponseEntity<Boolean> hasVoted = new ResponseEntity<Boolean>(postService.userHasUpVoted(postId), HttpStatus.OK);
+            return hasVoted;
+        } else {
+            ResponseEntity<Boolean> hasVoted = new ResponseEntity<Boolean>(postService.userHasDownVoted(postId), HttpStatus.OK);
+            return hasVoted;
+        }
+
+    }
+
 }

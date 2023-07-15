@@ -48,29 +48,46 @@ public class PostService {
         }
         return post;
     }
-    public void addVote(int postId) {
-        addVoter();
-    }
-    public void removeVote(int postId) {
-        removeVoter();
-    }
-    
-    public void addVoter() {
 
-    }
-    public void removeVoter() {
-
-    }
-    public void updatePost(int postId, String voteType) {
+    public boolean userHasUpVoted(int postId) {
         Post post = getPostById(postId);
         User currentUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         if (post.getUpVoterIds().contains(currentUser.getId())) {
-            post.getUpVoterIds().removeIf( id -> id == currentUser.getId());
-            System.out.println(post.getUpVoterIds());
-            post.setUpVotes(post.getUpVotes() - 1);
+            return true;
         } else {
-            post.getUpVoterIds().add(currentUser.getId());
-            post.setUpVotes(post.getUpVotes() + 1);
+            return false;
+        }
+    }
+
+    public boolean userHasDownVoted(int postId) {
+        Post post = getPostById(postId);
+        User currentUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        if (post.getDownVoterIds().contains(currentUser.getId())) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public void updatePost(int postId, String voteType) {
+        Post post = getPostById(postId);
+        User currentUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        if (voteType.equals("upvote")) {
+            if (userHasUpVoted(postId)) {
+                post.getUpVoterIds().removeIf( id -> id == currentUser.getId());
+                post.setUpVotes(post.getUpVotes() - 1);
+            } else {
+                post.getUpVoterIds().add(currentUser.getId());
+                post.setUpVotes(post.getUpVotes() + 1);
+            }
+        } else if (voteType.equals("downvote")) {
+            if (userHasDownVoted(postId)) {
+                post.getDownVoterIds().removeIf( id -> id == currentUser.getId());
+                post.setDownVotes(post.getDownVotes() - 1);
+            } else {
+                post.getDownVoterIds().add(currentUser.getId());
+                post.setDownVotes(post.getDownVotes() + 1);
+            }
         }
         postRepo.save(post);
     }
