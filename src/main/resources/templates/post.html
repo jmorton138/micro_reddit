@@ -20,12 +20,13 @@
                 </div>
                 <button type="submit" class="btn btn-primary">Submit</button>
             </form>
+            <div>
+                <div>upvotes: <div th:id="'post-upvote-count-' + ${post.id}" th:text="${post.upVotes}"></div></div>
+                <div>downvotes:  <div th:id="'post-downvote-count-' + ${post.id}" th:text="${post.downVotes}"></div></div>
+                <button onclick="vote(event)" data-posttype="post" th:data-id="${post.id}" data-votetype="upvote" th:class="${post.upVoterIds.contains(currentUser.getId())} ? 'upvote-btn voted' : 'upvote-btn not-voted'" th:id="'post-upvote-btn-' + ${post.id}">Upvote</button>
+                <button onclick="vote(event)" data-posttype="post" th:data-id="${post.id}" data-votetype="downvote" th:class="${post.downVoterIds.contains(currentUser.getId())}? 'downvote-btn voted' : 'downvote-btn not-voted'" th:id="'post-downvote-btn-' + ${post.id}">Downvote</button>
+            </div>
 
-            <div>upvotes: <div th:id="'post-upvote-count-' + ${post.id}" th:text="${post.upVotes}"></div></div>
-            <div>downvotes:  <div th:id="'post-downvote-count-' + ${post.id}" th:text="${post.downVotes}"></div></div>
-
-            <button onclick="vote(event)" data-posttype="post" th:data-id="${post.id}" data-votetype="upvote" th:class="${hasUpVoted} ? 'upvote-btn voted' : 'upvote-btn not-voted'" th:id="'post-upvote-btn-' + ${post.id}">Upvote</button>
-            <button onclick="vote(event)" data-posttype="post" th:data-id="${post.id}" data-votetype="downvote" th:class="${hasDownVoted}? 'downvote-btn voted' : 'downvote-btn not-voted'" th:id="'post-downvote-btn-' + ${post.id}">Downvote</button>
         </div>
         <div class="container">
             <div th:each="subPost : ${subPosts}">
@@ -40,6 +41,15 @@
                                 </div>
                             </div>
                         </div>
+                    </div>
+                    <div>
+                        <div>upvotes: <div th:id="'post-upvote-count-' + ${subPost.id}" th:text="${subPost.upVotes}"></div></div>
+                        <div>downvotes:  <div th:id="'post-downvote-count-' + ${subPost.id}" th:text="${subPost.downVotes}"></div></div>
+<!--                        // -->
+<!--                        @postService.userHasUpVoted(subPost.id)-->
+                        <button onclick="vote(event)" data-posttype="post" th:data-id="${subPost.id}" data-votetype="upvote" th:class="${subPost.upVoterIds.contains(currentUser.getId())} ? 'upvote-btn voted' : 'upvote-btn not-voted'" th:id="'post-upvote-btn-' + ${subPost.id}">Upvote</button>
+                        <div th:text="${subPost.id}"></div>
+                        <button onclick="vote(event)" data-posttype="post" th:data-id="${subPost.id}" data-votetype="downvote" th:class="${subPost.downVoterIds.contains(currentUser.getId())}? 'downvote-btn voted' : 'downvote-btn not-voted'" th:id="'post-downvote-btn-' + ${subPost.id}">Downvote</button>
                     </div>
                     <form th:action="@{/channels/{channelId}/posts/{rootPostId}/{parentPostId}/subpost-create(channelId=${channel.id}, rootPostId=${post.id}, parentPostId=${subPost.id})}" method="post" th:object="${newSubPost}">
                         <div class="form-group">

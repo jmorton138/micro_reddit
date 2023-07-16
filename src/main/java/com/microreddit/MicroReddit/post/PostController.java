@@ -3,9 +3,11 @@ package com.microreddit.MicroReddit.post;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.TextNode;
 import com.microreddit.MicroReddit.comment.Comment;
+import com.microreddit.MicroReddit.user.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -25,6 +27,8 @@ public class PostController {
         model.addAttribute("channel", post.getChannel());
         model.addAttribute("newSubPost", new Post());
         model.addAttribute("subPosts", post.getSubPosts());
+        // TODO: Problem, these 2 attributes only apply to the root post, how can I have this boolean for every nested subpost?
+        model.addAttribute("currentUser", (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal());
         model.addAttribute("hasUpVoted", postService.userHasUpVoted(postId));
         model.addAttribute("hasDownVoted", postService.userHasDownVoted(postId));
         return "post";

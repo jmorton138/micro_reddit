@@ -2,8 +2,7 @@ window.addEventListener("DOMContentLoaded", (event) => {
   console.log("DOM fully loaded and parsed");
 });
 
-async function putData(data) {
-  var postId = document.getElementById('post-id').value;
+async function putData(data, postId) {
   try {
     const response = await fetch(`/posts/${postId}/vote`, {
       method: "PUT",
@@ -18,8 +17,7 @@ async function putData(data) {
   }
 }
 
-function decrementIfVotedNonTargeted(postType, nonTargetedVoteType, id) {
-    var postId = document.getElementById('post-id').value;
+function decrementIfVotedNonTargeted(postType, nonTargetedVoteType, postId) {
     let url = `/posts/${postId}/votes/vote-type/${nonTargetedVoteType}`;
     console.log(url);
     fetch(url, {
@@ -31,13 +29,12 @@ function decrementIfVotedNonTargeted(postType, nonTargetedVoteType, id) {
         .then(result => result.json())
         .then(data => {
             if (data == true) {
-              decrementVote(postType, nonTargetedVoteType, id);
+              decrementVote(postType, nonTargetedVoteType, postId);
             }
         });
 }
 
 function vote(event) {
-console.log(event);
     var targetedVoteType = event.target.dataset.votetype;
     var nonTargetedVoteType = (targetedVoteType == 'upvote') ? 'downvote' : 'upvote';
     if (event.target.classList.contains('not-voted')) {
@@ -48,24 +45,11 @@ console.log(event);
     }
 
 }
-//function incrementVote(postType, voteType) {
-//    var countElId = `${postType}-${voteType}-count`;
-//    var voteCountEl = document.getElementById(countElId);
-//    var voteBtnId = `${postType}-${voteType}-btn`;
-//    var voteBtn = document.getElementById(voteBtnId);
-//    voteBtn.classList.remove('not-voted');
-//    voteBtn.classList.add('voted');
-//    voteCountEl.innerText = parseInt(voteCountEl.innerText) + 1
-//    var data =  {
-//        voteType: voteType,
-//    }
-//    putData(data);
-//}
 
-function incrementVote(postType, voteType, id) {
-    var countElId = `${postType}-${voteType}-count-${id}`;
+function incrementVote(postType, voteType, postId) {
+    var countElId = `${postType}-${voteType}-count-${postId}`;
     var voteCountEl = document.getElementById(countElId);
-    var voteBtnId = `${postType}-${voteType}-btn-${id}`;
+    var voteBtnId = `${postType}-${voteType}-btn-${postId}`;
     var voteBtn = document.getElementById(voteBtnId);
     voteBtn.classList.remove('not-voted');
     voteBtn.classList.add('voted');
@@ -73,27 +57,13 @@ function incrementVote(postType, voteType, id) {
     var data =  {
         voteType: voteType,
     }
-    putData(data);
+    putData(data, postId);
 }
 
-//function decrementVote(postType, voteType) {
-//    var countElId = `${postType}-${voteType}-count`;
-//    var upVoteCountEl = document.getElementById(countElId);
-//    var voteBtnId = `${postType}-${voteType}-btn`;
-//    var voteBtn = document.getElementById(voteBtnId);
-//    voteBtn.classList.remove('voted');
-//    voteBtn.classList.add('not-voted');
-//    upVoteCountEl.innerText = parseInt(upVoteCountEl.innerText) - 1
-//    var data =  {
-//        voteType: voteType,
-//    }
-//    putData(data);
-//}
-
-function decrementVote(postType, voteType, id) {
-    var countElId = `${postType}-${voteType}-count-${id}`;
+function decrementVote(postType, voteType, postId) {
+    var countElId = `${postType}-${voteType}-count-${postId}`;
     var upVoteCountEl = document.getElementById(countElId);
-    var voteBtnId = `${postType}-${voteType}-btn-${id}`;
+    var voteBtnId = `${postType}-${voteType}-btn-${postId}`;
     var voteBtn = document.getElementById(voteBtnId);
     voteBtn.classList.remove('voted');
     voteBtn.classList.add('not-voted');
@@ -101,5 +71,5 @@ function decrementVote(postType, voteType, id) {
     var data =  {
         voteType: voteType,
     }
-    putData(data);
+    putData(data, postId);
 }

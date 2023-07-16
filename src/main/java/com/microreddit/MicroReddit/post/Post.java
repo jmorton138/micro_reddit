@@ -109,4 +109,5 @@ public class Post {
     public void setSubPosts(List<Post> subPosts) {
         this.subPosts = subPosts;
     }
+
 }
