@@ -3,9 +3,11 @@ package com.microreddit.MicroReddit.post;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.TextNode;
 import com.microreddit.MicroReddit.comment.Comment;
+import com.microreddit.MicroReddit.user.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -23,10 +25,9 @@ public class PostController {
         Post post = postService.getPostById(postId);
         model.addAttribute("post", post);
         model.addAttribute("channel", post.getChannel());
-        model.addAttribute("newComment", new Comment());
-        model.addAttribute("comments", post.getComments());
-        model.addAttribute("hasUpVoted", postService.userHasUpVoted(postId));
-        model.addAttribute("hasDownVoted", postService.userHasDownVoted(postId));
+        model.addAttribute("newSubPost", new Post());
+        model.addAttribute("subPosts", post.getSubPosts());
+        model.addAttribute("currentUser", (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal());
         return "post";
     }
 
@@ -54,7 +55,12 @@ public class PostController {
             ResponseEntity<Boolean> hasVoted = new ResponseEntity<Boolean>(postService.userHasDownVoted(postId), HttpStatus.OK);
             return hasVoted;
         }
+    }
 
+    @PostMapping("/channels/{channelId}/posts/{rootPostId}/{parentPostId}/subpost-create")
+    public String submitNewPost(@PathVariable("rootPostId") int rootPostId, @PathVariable("parentPostId") int parentPostId, @PathVariable("channelId") int channelId, @ModelAttribute("newSubPost") Post subPost) {
+        postService.addNewSubPost(parentPostId, subPost);
+        return "redirect:/channels/{channelId}/posts/{rootPostId}";
     }
 
 }

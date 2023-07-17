@@ -12,11 +12,11 @@ public class CommentController {
     @Autowired
     private CommentService commentService;
 
-    @PostMapping("/channels/{channelId}/posts/{postId}/comment-create")
-    public String submitNewCommentToPost(@PathVariable("postId") int postId, @ModelAttribute("newComment") Comment comment) {
-        commentService.addNewCommentToPost(comment, postId);
-        return "redirect:/channels/{channelId}/posts/{postId}";
-    }
+//    @PostMapping("/channels/{channelId}/posts/{postId}/comment-create")
+//    public String submitNewCommentToPost(@PathVariable("postId") int postId, @ModelAttribute("newComment") Comment comment) {
+//        commentService.addNewCommentToPost(comment, postId);
+//        return "redirect:/channels/{channelId}/posts/{postId}";
+//    }
 
     @PostMapping("/channels/{channelId}/posts/{postId}/{commentId}/subcomment-create")
     public String submitNewSubCommentToComment(@PathVariable("commentId") int parentCommentId, @ModelAttribute("newComment") Comment subComment) {

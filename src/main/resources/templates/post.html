@@ -9,47 +9,64 @@
     <body>
         <header th:insert="~{navbar}"></header>
         <div class="container text-center border">
+            <span th:text="${post.author.username}"></span>
+
             <span th:text="${post.text}"></span>
             <input type="hidden" id="post-id" th:value="${post.id}"/>
         </div>
         <div class="container border">
-            <form th:action="@{/channels/{channelId}/posts/{postId}/comment-create(channelId=${channel.id}, postId=${post.id})}" method="post" th:object="${newComment}">
+            <form th:action="@{/channels/{channelId}/posts/{rootPostId}/{parentPostId}/subpost-create(channelId=${channel.id}, rootPostId=${post.id}, parentPostId=${post.id})}" method="post" th:object="${newSubPost}">
                 <div class="form-group">
                     <label for="new-comment-input">Leave Comment:
                         <input id="new-comment-input" class="form-control" type="text" th:field="*{text}" ></label>
                 </div>
                 <button type="submit" class="btn btn-primary">Submit</button>
             </form>
+            <div>
+                <div>upvotes: <div th:id="'post-upvote-count-' + ${post.id}" th:text="${post.upVotes}"></div></div>
+                <div>downvotes:  <div th:id="'post-downvote-count-' + ${post.id}" th:text="${post.downVotes}"></div></div>
+                <button onclick="vote(event)" data-posttype="post" th:data-id="${post.id}" data-votetype="upvote" th:class="${post.upVoterIds.contains(currentUser.getId())} ? 'upvote-btn voted' : 'upvote-btn not-voted'" th:id="'post-upvote-btn-' + ${post.id}">Upvote</button>
+                <button onclick="vote(event)" data-posttype="post" th:data-id="${post.id}" data-votetype="downvote" th:class="${post.downVoterIds.contains(currentUser.getId())}? 'downvote-btn voted' : 'downvote-btn not-voted'" th:id="'post-downvote-btn-' + ${post.id}">Downvote</button>
+            </div>
 
-            <div>upvotes: <div id="post-upvote-count" th:text="${post.upVotes}"></div></div>
-            <div>downvotes:  <div id="post-downvote-count" th:text="${post.downVotes}"></div></div>
-
-            <button data-posttype="post" data-votetype="upvote" th:class="${hasUpVoted} ? 'upvote-btn voted' : 'upvote-btn not-voted'" id="post-upvote-btn">Upvote</button>
-            <button data-posttype="post" data-votetype="downvote" th:class="${hasDownVoted}? 'downvote-btn voted' : 'downvote-btn not-voted'" id="post-downvote-btn">Downvote</button>
         </div>
         <div class="container">
-            <div th:each="comment : ${comments}">
+            <div th:each="subPost : ${subPosts}">
                 <div class="container border text-center">
                     <div class="row">
                         <div class="col-sm-3">
-                            Author
+                            <span th:text="${subPost.author.username}"></span>
                         </div>
                         <div class="col-sm-9">
                             <div class="row">
-                                <div th:text="${comment.text}" class="col-8 col-sm-6">
+                                <div th:text="${subPost.text}" class="col-8 col-sm-6">
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <form th:action="@{/channels/{channelId}/posts/{postId}/{commentId}/subcomment-create(channelId=${channel.id}, postId=${post.id}, commentId=${comment.id})}" method="post" th:object="${newComment}">
+                    <div>
+                        <div>upvotes: <div th:id="'post-upvote-count-' + ${subPost.id}" th:text="${subPost.upVotes}"></div></div>
+                        <div>downvotes:  <div th:id="'post-downvote-count-' + ${subPost.id}" th:text="${subPost.downVotes}"></div></div>
+                        <button onclick="vote(event)" data-posttype="post" th:data-id="${subPost.id}" data-votetype="upvote" th:class="${subPost.upVoterIds.contains(currentUser.getId())} ? 'upvote-btn voted' : 'upvote-btn not-voted'" th:id="'post-upvote-btn-' + ${subPost.id}">Upvote</button>
+                        <button onclick="vote(event)" data-posttype="post" th:data-id="${subPost.id}" data-votetype="downvote" th:class="${subPost.downVoterIds.contains(currentUser.getId())}? 'downvote-btn voted' : 'downvote-btn not-voted'" th:id="'post-downvote-btn-' + ${subPost.id}">Downvote</button>
+                    </div>
+                    <form th:action="@{/channels/{channelId}/posts/{rootPostId}/{parentPostId}/subpost-create(channelId=${channel.id}, rootPostId=${post.id}, parentPostId=${subPost.id})}" method="post" th:object="${newSubPost}">
                         <div class="form-group">
                             <label for="new-subcomment-input">Leave Comment:
                                 <input id="new-subcomment-input" class="form-control" type="text" th:field="*{text}" ></label>
                         </div>
                         <button type="submit" class="btn btn-primary">Submit</button>
                     </form>
-                    <div th:each="sub : ${comment.subComments}">
+                    <div th:each="sub : ${subPost.subPosts}">
+                        <span th:text="${sub.author.username}"></span>
+
                         <div th:text="${sub.text}"></div>
+                        <div>
+                            <div>upvotes: <div th:id="'post-upvote-count-' + ${sub.id}" th:text="${sub.upVotes}"></div></div>
+                            <div>downvotes:  <div th:id="'post-downvote-count-' + ${sub.id}" th:text="${sub.downVotes}"></div></div>
+                            <button onclick="vote(event)" data-posttype="post" th:data-id="${sub.id}" data-votetype="upvote" th:class="${sub.upVoterIds.contains(currentUser.getId())} ? 'upvote-btn voted' : 'upvote-btn not-voted'" th:id="'post-upvote-btn-' + ${sub.id}">Upvote</button>
+                            <button onclick="vote(event)" data-posttype="post" th:data-id="${sub.id}" data-votetype="downvote" th:class="${sub.downVoterIds.contains(currentUser.getId())}? 'downvote-btn voted' : 'downvote-btn not-voted'" th:id="'post-downvote-btn-' + ${sub.id}">Downvote</button>
+                        </div>
                     </div>
                 </div>
             </div>

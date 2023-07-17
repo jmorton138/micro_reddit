@@ -17,6 +17,7 @@ public class Post {
     @GeneratedValue
     private int id;
 
+    @ManyToOne
     private User author;
 
     @ManyToOne
@@ -31,8 +32,11 @@ public class Post {
 
     private List<Integer> downVoterIds = new ArrayList<Integer>();
 
-    @OneToMany(mappedBy = "post")
-    private List<Comment> comments;
+//    @OneToMany(mappedBy = "post")
+//    private List<Comment> comments;
+
+    @OneToMany
+    private List<Post> subPosts;
 
     public String getText() {
         return text;
@@ -66,13 +70,13 @@ public class Post {
         this.downVotes = downVotes;
     }
 
-    public List<Comment> getComments() {
-        return comments;
-    }
-
-    public void setComments(List<Comment> comments) {
-        this.comments = comments;
-    }
+//    public List<Comment> getComments() {
+//        return comments;
+//    }
+//
+//    public void setComments(List<Comment> comments) {
+//        this.comments = comments;
+//    }
 
     public Channel getChannel() {
         return channel;
@@ -97,5 +101,21 @@ public class Post {
 
     public void setDownVoterIds(List<Integer> downVoterIds) {
         this.downVoterIds = downVoterIds;
+    }
+
+    public List<Post> getSubPosts() {
+        return subPosts;
+    }
+
+    public void setSubPosts(List<Post> subPosts) {
+        this.subPosts = subPosts;
+    }
+
+    public User getAuthor() {
+        return author;
+    }
+
+    public void setAuthor(User author) {
+        this.author = author;
     }
 }
