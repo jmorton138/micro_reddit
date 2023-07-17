@@ -8,7 +8,7 @@ async function putData(data, postId) {
   try {
     const response = await fetch(`/posts/${postId}/vote`, {
       method: "PUT",
-      headers: {
+      headers: {g
         "Content-Type": "application/json",
         "X-CSRF-TOKEN": token,
       },
