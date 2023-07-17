@@ -27,10 +27,7 @@ public class PostController {
         model.addAttribute("channel", post.getChannel());
         model.addAttribute("newSubPost", new Post());
         model.addAttribute("subPosts", post.getSubPosts());
-        // TODO: Problem, these 2 attributes only apply to the root post, how can I have this boolean for every nested subpost?
         model.addAttribute("currentUser", (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal());
-        model.addAttribute("hasUpVoted", postService.userHasUpVoted(postId));
-        model.addAttribute("hasDownVoted", postService.userHasDownVoted(postId));
         return "post";
     }
 

@@ -19,10 +19,12 @@ public class PostService {
     @Autowired
     private ChannelRepo channelRepo;
     public void addNewPost(Post post, int channelId) {
+        User currentUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
         Optional<Post> newPost = channelRepo.findById(channelId).map(channel -> {
             int upVotes = 0;
             int downVotes = 0;
+            post.setAuthor(currentUser);
             post.setChannel(channel);
             post.setUpVotes(upVotes);
             post.setDownVotes(downVotes);
@@ -94,8 +96,10 @@ public class PostService {
     }
 
     public void addNewSubPost(int parentPostId, Post subPost) {
+        User currentUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Post parentPost = postRepo.getById(parentPostId);
         List<Post> subPosts = parentPost.getSubPosts();
+        subPost.setAuthor(currentUser);
         postRepo.save(subPost);
         subPosts.add(subPost);
         parentPost.setSubPosts(subPosts);

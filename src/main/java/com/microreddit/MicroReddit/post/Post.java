@@ -17,6 +17,7 @@ public class Post {
     @GeneratedValue
     private int id;
 
+    @ManyToOne
     private User author;
 
     @ManyToOne
@@ -110,4 +111,11 @@ public class Post {
         this.subPosts = subPosts;
     }
 
+    public User getAuthor() {
+        return author;
+    }
+
+    public void setAuthor(User author) {
+        this.author = author;
+    }
 }
