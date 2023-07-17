@@ -3,11 +3,14 @@ window.addEventListener("DOMContentLoaded", (event) => {
 });
 
 async function putData(data, postId) {
+     const token = document.querySelector('meta[name="_csrf"]').content;
+     const header = document.querySelector('meta[name="_csrf_header"]').content;
   try {
     const response = await fetch(`/posts/${postId}/vote`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
+        "X-CSRF-TOKEN": token,
       },
       body: JSON.stringify(data),
     });

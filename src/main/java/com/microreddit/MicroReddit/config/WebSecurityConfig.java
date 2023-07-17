@@ -19,17 +19,20 @@ public class WebSecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
         httpSecurity
+                //.csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers("/user-registration", "/h2-console").permitAll()
+
+                        .requestMatchers("/","/user-registration", "/h2-console").permitAll()
                         .anyRequest().authenticated()
                 )
-//                .formLogin((form) -> form
-//                        .loginPage("/login")
-//                        .permitAll()
-//                )
-                .formLogin(withDefaults())
+                .formLogin((form) -> form
+                        .loginPage("/login")
+                        .permitAll()
+                )
+//                .formLogin(withDefaults())
                 .logout((logout) -> logout.permitAll()
                 );
+
         return httpSecurity.build();
     }
     @Bean
