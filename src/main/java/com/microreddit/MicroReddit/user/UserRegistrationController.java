@@ -34,4 +34,9 @@ public class UserRegistrationController {
         userService.addUser(user);
         return "redirect:/login";
     }
+
+    @GetMapping("/login")
+    public String loginView() {
+        return "login";
+    }
 }
